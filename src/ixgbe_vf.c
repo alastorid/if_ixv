@@ -85,7 +85,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 		hw->mac.ops.enable_mc = NULL;
 		hw->mac.ops.disable_mc = NULL;
 		hw->mac.ops.clear_vfta = NULL;
-		hw->mac.ops.set_vfta = ixgbe_set_vfta_vf;
+		hw->mac.ops.set_vfta = ixgbe_hv_set_vfta_vf;
 		hw->mac.ops.set_rlpml = ixgbevf_rlpml_set_vf;
 	}
 	else
@@ -588,6 +588,11 @@ s32 ixgbe_set_vfta_vf(struct ixgbe_hw *hw, u32 vlan, u32 vind,
 	return ret_val | (msgbuf[0] & IXGBE_VT_MSGTYPE_FAILURE);
 }
 
+s32 ixgbe_hv_set_vfta_vf(struct ixgbe_hw *hw, u32 vlan, u32 vind,
+		      bool vlan_on, bool vlvf_bypass)
+{
+	return IXGBE_ERR_FEATURE_NOT_SUPPORTED;
+}
 /**
  * ixgbe_get_num_of_tx_queues_vf - Get number of TX queues
  * @hw: pointer to hardware structure
