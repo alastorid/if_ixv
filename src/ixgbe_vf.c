@@ -71,7 +71,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 
 		/* Link */
 		hw->mac.ops.setup_link = ixgbe_setup_mac_link_vf;
-		hw->mac.ops.check_link = ixgbe_check_mac_link_vf;
+		hw->mac.ops.check_link = ixgbe_hv_check_mac_link_vf;
 		hw->mac.ops.get_link_capabilities = NULL;
 
 		/* RAR, Multicast, VLAN */
@@ -743,6 +743,104 @@ s32 ixgbe_check_mac_link_vf(struct ixgbe_hw *hw, ixgbe_link_speed *speed,
 		ret_val = IXGBE_ERR_TIMEOUT;
 		goto out;
 	}
+
+	/* if we passed all the tests above then the link is up and we no
+	 * longer need to check for link
+	 */
+	mac->get_link_status = FALSE;
+
+out:
+	*link_up = !mac->get_link_status;
+	return ret_val;
+}
+
+s32 ixgbe_hv_check_mac_link_vf(struct ixgbe_hw *hw, ixgbe_link_speed *speed,
+			    bool *link_up, bool autoneg_wait_to_complete)
+{
+	struct ixgbe_mbx_info *mbx = &hw->mbx;
+	struct ixgbe_mac_info *mac = &hw->mac;
+	s32 ret_val = IXGBE_SUCCESS;
+	u32 in_msg = 0;
+	u32 links_reg;
+
+	UNREFERENCED_1PARAMETER(autoneg_wait_to_complete);
+
+	/* If we were hit with a reset drop the link */
+	if (!mbx->ops[0].check_for_rst(hw, 0) || !mbx->timeout)
+		mac->get_link_status = TRUE;
+
+	if (!mac->get_link_status)
+		goto out;
+
+	/* if link status is down no point in checking to see if pf is up */
+	links_reg = IXGBE_READ_REG(hw, IXGBE_VFLINKS);
+	if (!(links_reg & IXGBE_LINKS_UP))
+		goto out;
+
+	/* for SFP+ modules and DA cables on 82599 it can take up to 500usecs
+	 * before the link status is correct
+	 */
+	if (mac->type == ixgbe_mac_82599_vf) {
+		int i;
+
+		for (i = 0; i < 5; i++) {
+			usec_delay(100);
+			links_reg = IXGBE_READ_REG(hw, IXGBE_VFLINKS);
+
+			if (!(links_reg & IXGBE_LINKS_UP))
+				goto out;
+		}
+	}
+
+	switch (links_reg & IXGBE_LINKS_SPEED_82599) {
+	case IXGBE_LINKS_SPEED_10G_82599:
+		*speed = IXGBE_LINK_SPEED_10GB_FULL;
+		if (hw->mac.type >= ixgbe_mac_X550_vf) {
+			if (links_reg & IXGBE_LINKS_SPEED_NON_STD)
+				*speed = IXGBE_LINK_SPEED_2_5GB_FULL;
+		}
+		break;
+	case IXGBE_LINKS_SPEED_1G_82599:
+		*speed = IXGBE_LINK_SPEED_1GB_FULL;
+		break;
+	case IXGBE_LINKS_SPEED_100_82599:
+		*speed = IXGBE_LINK_SPEED_100_FULL;
+		if (hw->mac.type == ixgbe_mac_X550_vf) {
+			if (links_reg & IXGBE_LINKS_SPEED_NON_STD)
+				*speed = IXGBE_LINK_SPEED_5GB_FULL;
+		}
+		break;
+	case IXGBE_LINKS_SPEED_10_X550EM_A:
+		*speed = IXGBE_LINK_SPEED_UNKNOWN;
+		/* Since Reserved in older MAC's */
+		if (hw->mac.type >= ixgbe_mac_X550_vf)
+			*speed = IXGBE_LINK_SPEED_10_FULL;
+		break;
+	default:
+		*speed = IXGBE_LINK_SPEED_UNKNOWN;
+	}
+
+	// /* if the read failed it could just be a mailbox collision, best wait
+	//  * until we are called again and don't report an error
+	//  */
+	// if (ixgbe_read_mbx(hw, &in_msg, 1, 0)) {
+	// 	if (hw->api_version >= ixgbe_mbox_api_15)
+	// 		mac->get_link_status = FALSE;
+	// 	goto out;
+	// }
+
+	// if (!(in_msg & IXGBE_VT_MSGTYPE_CTS)) {
+	// 	/* msg is not CTS and is NACK we must have lost CTS status */
+	// 	if (in_msg & IXGBE_VT_MSGTYPE_FAILURE)
+	// 		ret_val = IXGBE_ERR_MBX;
+	// 	goto out;
+	// }
+
+	// /* the pf is talking, if we timed out in the past we reinit */
+	// if (!mbx->timeout) {
+	// 	ret_val = IXGBE_ERR_TIMEOUT;
+	// 	goto out;
+	// }
 
 	/* if we passed all the tests above then the link is up and we no
 	 * longer need to check for link
