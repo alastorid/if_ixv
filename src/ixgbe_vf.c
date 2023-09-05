@@ -77,7 +77,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 
 		/* RAR, Multicast, VLAN */
 		hw->mac.ops.set_rar = ixgbe_hv_set_rar_vf;
-		hw->mac.ops.set_uc_addr = ixgbevf_set_uc_addr_vf;
+		hw->mac.ops.set_uc_addr = ixgbevf_hv_set_uc_addr_vf;
 		hw->mac.ops.init_rx_addrs = NULL;
 		hw->mac.ops.update_mc_addr_list = ixgbe_hv_update_mc_addr_list_vf;
 		hw->mac.ops.update_xcast_mode = ixgbevf_hv_update_xcast_mode;
@@ -655,6 +655,11 @@ s32 ixgbevf_set_uc_addr_vf(struct ixgbe_hw *hw, u32 index, u8 *addr)
 	}
 
 	return ret_val;
+}
+
+s32 ixgbevf_hv_set_uc_addr_vf(struct ixgbe_hw *hw, u32 index, u8 *addr)
+{
+	return IXGBE_ERR_FEATURE_NOT_SUPPORTED;
 }
 
 /**
