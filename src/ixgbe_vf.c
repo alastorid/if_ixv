@@ -81,7 +81,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 		hw->mac.ops.init_rx_addrs = NULL;
 		hw->mac.ops.update_mc_addr_list = ixgbe_hv_update_mc_addr_list_vf;
 		hw->mac.ops.update_xcast_mode = ixgbevf_hv_update_xcast_mode;
-		hw->mac.ops.get_link_state = ixgbe_get_link_state_vf;
+		hw->mac.ops.get_link_state = ixgbe_hv_get_link_state_vf;
 		hw->mac.ops.enable_mc = NULL;
 		hw->mac.ops.disable_mc = NULL;
 		hw->mac.ops.clear_vfta = NULL;
@@ -552,6 +552,11 @@ s32 ixgbe_get_link_state_vf(struct ixgbe_hw *hw, bool *link_state)
 	}
 
 	return ret_val;
+}
+
+s32 ixgbe_hv_get_link_state_vf(struct ixgbe_hw *hw, bool *link_state)
+{
+	return IXGBE_ERR_FEATURE_NOT_SUPPORTED;
 }
 
 /**
