@@ -58,6 +58,7 @@ static ixgbe_vendor_info_t ixv_vendor_info_array[] =
 {
 	{IXGBE_INTEL_VENDOR_ID, IXGBE_DEV_ID_82599_VF, 0, 0, 0},
 	{IXGBE_INTEL_VENDOR_ID, IXGBE_DEV_ID_X540_VF, 0, 0, 0},
+	{IXGBE_INTEL_VENDOR_ID, IXGBE_DEV_ID_X540_VF_HV, 0, 0, 0},
 	{IXGBE_INTEL_VENDOR_ID, IXGBE_DEV_ID_X550_VF, 0, 0, 0},
 	{IXGBE_INTEL_VENDOR_ID, IXGBE_DEV_ID_X550EM_X_VF, 0, 0, 0},
 	{IXGBE_INTEL_VENDOR_ID, IXGBE_DEV_ID_X550EM_A_VF, 0, 0, 0},
@@ -360,6 +361,7 @@ ixv_attach(device_t dev)
 		hw->mac.type = ixgbe_mac_82599_vf;
 		break;
 	case IXGBE_DEV_ID_X540_VF:
+	case IXGBE_DEV_ID_X540_VF_HV:
 		hw->mac.type = ixgbe_mac_X540_vf;
 		break;
 	case IXGBE_DEV_ID_X550_VF:
