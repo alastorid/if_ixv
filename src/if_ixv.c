@@ -963,7 +963,7 @@ ixv_negotiate_api(struct ixgbe_softc *sc)
 	int             i = 0;
 
 	while (mbx_api[i] != ixgbe_mbox_api_unknown) {
-		if (ixgbevf_negotiate_api_version(hw, mbx_api[i]) == 0)
+		if (hw->mac.ops.negotiate_api_version(hw, mbx_api[i]) == 0)
 			return (0);
 		i++;
 	}

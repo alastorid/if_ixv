@@ -34,7 +34,7 @@
 
 
 #include "ixgbe_vf.h"
-#include <strings.h>
+#include <net/ethernet.h>
 
 #ifndef IXGBE_VFWRITE_REG
 #define IXGBE_VFWRITE_REG IXGBE_WRITE_REG
@@ -795,7 +795,6 @@ s32 ixgbe_hv_check_mac_link_vf(struct ixgbe_hw *hw, ixgbe_link_speed *speed,
 	struct ixgbe_mbx_info *mbx = &hw->mbx;
 	struct ixgbe_mac_info *mac = &hw->mac;
 	s32 ret_val = IXGBE_SUCCESS;
-	u32 in_msg = 0;
 	u32 links_reg;
 
 	UNREFERENCED_1PARAMETER(autoneg_wait_to_complete);
