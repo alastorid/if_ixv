@@ -191,6 +191,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw);
 s32 ixgbe_init_hw_vf(struct ixgbe_hw *hw);
 s32 ixgbe_start_hw_vf(struct ixgbe_hw *hw);
 s32 ixgbe_reset_hw_vf(struct ixgbe_hw *hw);
+s32 ixgbe_hv_reset_hw_vf(struct ixgbe_hw *hw);
 s32 ixgbe_stop_adapter_vf(struct ixgbe_hw *hw);
 u32 ixgbe_get_num_of_tx_queues_vf(struct ixgbe_hw *hw);
 u32 ixgbe_get_num_of_rx_queues_vf(struct ixgbe_hw *hw);

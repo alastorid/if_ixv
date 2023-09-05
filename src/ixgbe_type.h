@@ -3663,6 +3663,7 @@ enum ixgbe_mac_type {
 	ixgbe_mac_82599_vf,
 	ixgbe_mac_X540,
 	ixgbe_mac_X540_vf,
+	ixgbe_mac_X540_hv_vf,
 	ixgbe_mac_X550,
 	ixgbe_mac_X550EM_x,
 	ixgbe_mac_X550EM_a,

@@ -361,8 +361,10 @@ ixv_attach(device_t dev)
 		hw->mac.type = ixgbe_mac_82599_vf;
 		break;
 	case IXGBE_DEV_ID_X540_VF:
-	case IXGBE_DEV_ID_X540_VF_HV:
 		hw->mac.type = ixgbe_mac_X540_vf;
+		break;
+	case IXGBE_DEV_ID_X540_VF_HV:
+		hw->mac.type = ixgbe_mac_X540_hv_vf;
 		break;
 	case IXGBE_DEV_ID_X550_VF:
 		hw->mac.type = ixgbe_mac_X550_vf;
@@ -2149,6 +2151,8 @@ ixv_init_device_features(struct ixgbe_softc *sc)
 		sc->feat_cap |= IXGBE_FEATURE_FRAME_LIMIT;
 		break;
 	case ixgbe_mac_X540_vf:
+		break;
+	case ixgbe_mac_X540_hv_vf:
 		break;
 	case ixgbe_mac_X550_vf:
 	case ixgbe_mac_X550EM_x_vf:

@@ -55,35 +55,70 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 {
 	u16 i;
 
-	/* MAC */
-	hw->mac.ops.init_hw = ixgbe_init_hw_vf;
-	hw->mac.ops.reset_hw = ixgbe_reset_hw_vf;
-	hw->mac.ops.start_hw = ixgbe_start_hw_vf;
-	/* Cannot clear stats on VF */
-	hw->mac.ops.clear_hw_cntrs = NULL;
-	hw->mac.ops.get_media_type = NULL;
-	hw->mac.ops.get_mac_addr = ixgbe_get_mac_addr_vf;
-	hw->mac.ops.stop_adapter = ixgbe_stop_adapter_vf;
-	hw->mac.ops.get_bus_info = NULL;
-	hw->mac.ops.negotiate_api_version = ixgbevf_negotiate_api_version;
+	if(hw->mac.type == ixgbe_mac_X540_hv_vf)
+	{
+		/* MAC */
+		hw->mac.ops.init_hw = ixgbe_init_hw_vf;
+		hw->mac.ops.reset_hw = ixgbe_hv_reset_hw_vf;
+		hw->mac.ops.start_hw = ixgbe_start_hw_vf;
+		/* Cannot clear stats on VF */
+		hw->mac.ops.clear_hw_cntrs = NULL;
+		hw->mac.ops.get_media_type = NULL;
+		hw->mac.ops.get_mac_addr = ixgbe_get_mac_addr_vf;
+		hw->mac.ops.stop_adapter = ixgbe_stop_adapter_vf;
+		hw->mac.ops.get_bus_info = NULL;
+		hw->mac.ops.negotiate_api_version = ixgbevf_negotiate_api_version;
 
-	/* Link */
-	hw->mac.ops.setup_link = ixgbe_setup_mac_link_vf;
-	hw->mac.ops.check_link = ixgbe_check_mac_link_vf;
-	hw->mac.ops.get_link_capabilities = NULL;
+		/* Link */
+		hw->mac.ops.setup_link = ixgbe_setup_mac_link_vf;
+		hw->mac.ops.check_link = ixgbe_check_mac_link_vf;
+		hw->mac.ops.get_link_capabilities = NULL;
 
-	/* RAR, Multicast, VLAN */
-	hw->mac.ops.set_rar = ixgbe_set_rar_vf;
-	hw->mac.ops.set_uc_addr = ixgbevf_set_uc_addr_vf;
-	hw->mac.ops.init_rx_addrs = NULL;
-	hw->mac.ops.update_mc_addr_list = ixgbe_update_mc_addr_list_vf;
-	hw->mac.ops.update_xcast_mode = ixgbevf_update_xcast_mode;
-	hw->mac.ops.get_link_state = ixgbe_get_link_state_vf;
-	hw->mac.ops.enable_mc = NULL;
-	hw->mac.ops.disable_mc = NULL;
-	hw->mac.ops.clear_vfta = NULL;
-	hw->mac.ops.set_vfta = ixgbe_set_vfta_vf;
-	hw->mac.ops.set_rlpml = ixgbevf_rlpml_set_vf;
+		/* RAR, Multicast, VLAN */
+		hw->mac.ops.set_rar = ixgbe_set_rar_vf;
+		hw->mac.ops.set_uc_addr = ixgbevf_set_uc_addr_vf;
+		hw->mac.ops.init_rx_addrs = NULL;
+		hw->mac.ops.update_mc_addr_list = ixgbe_update_mc_addr_list_vf;
+		hw->mac.ops.update_xcast_mode = ixgbevf_update_xcast_mode;
+		hw->mac.ops.get_link_state = ixgbe_get_link_state_vf;
+		hw->mac.ops.enable_mc = NULL;
+		hw->mac.ops.disable_mc = NULL;
+		hw->mac.ops.clear_vfta = NULL;
+		hw->mac.ops.set_vfta = ixgbe_set_vfta_vf;
+		hw->mac.ops.set_rlpml = ixgbevf_rlpml_set_vf;
+	}
+	else
+	{
+		/* MAC */
+		hw->mac.ops.init_hw = ixgbe_init_hw_vf;
+		hw->mac.ops.reset_hw = ixgbe_reset_hw_vf;
+		hw->mac.ops.start_hw = ixgbe_start_hw_vf;
+		/* Cannot clear stats on VF */
+		hw->mac.ops.clear_hw_cntrs = NULL;
+		hw->mac.ops.get_media_type = NULL;
+		hw->mac.ops.get_mac_addr = ixgbe_get_mac_addr_vf;
+		hw->mac.ops.stop_adapter = ixgbe_stop_adapter_vf;
+		hw->mac.ops.get_bus_info = NULL;
+		hw->mac.ops.negotiate_api_version = ixgbevf_negotiate_api_version;
+
+		/* Link */
+		hw->mac.ops.setup_link = ixgbe_setup_mac_link_vf;
+		hw->mac.ops.check_link = ixgbe_check_mac_link_vf;
+		hw->mac.ops.get_link_capabilities = NULL;
+
+		/* RAR, Multicast, VLAN */
+		hw->mac.ops.set_rar = ixgbe_set_rar_vf;
+		hw->mac.ops.set_uc_addr = ixgbevf_set_uc_addr_vf;
+		hw->mac.ops.init_rx_addrs = NULL;
+		hw->mac.ops.update_mc_addr_list = ixgbe_update_mc_addr_list_vf;
+		hw->mac.ops.update_xcast_mode = ixgbevf_update_xcast_mode;
+		hw->mac.ops.get_link_state = ixgbe_get_link_state_vf;
+		hw->mac.ops.enable_mc = NULL;
+		hw->mac.ops.disable_mc = NULL;
+		hw->mac.ops.clear_vfta = NULL;
+		hw->mac.ops.set_vfta = ixgbe_set_vfta_vf;
+		hw->mac.ops.set_rlpml = ixgbevf_rlpml_set_vf;
+	}
 
 	hw->mac.max_tx_queues = 1;
 	hw->mac.max_rx_queues = 1;
@@ -241,6 +276,18 @@ s32 ixgbe_reset_hw_vf(struct ixgbe_hw *hw)
 	hw->mac.mc_filter_type = msgbuf[IXGBE_VF_MC_TYPE_WORD];
 
 	return ret_val;
+}
+
+s32 ixgbe_hv_reset_hw_vf(struct ixgbe_hw *hw)
+{
+	int i;
+
+	for(i=0;i<6;++i)
+	{
+		hw->mac.perm_addr[i] = ixgbe_read8_pci_cfg_vf(hw, i + 0x201);
+	}
+
+	return 0;
 }
 
 /**

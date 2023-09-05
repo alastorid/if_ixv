@@ -34,6 +34,12 @@
 
 #include "ixgbe.h"
 
+inline u8
+ixgbe_read8_pci_cfg_vf(struct ixgbe_hw *hw, u32 reg)
+{
+	return pci_read_config(((struct ixgbe_softc *)hw->back)->dev, reg, 1);
+}
+
 inline u16
 ixgbe_read_pci_cfg_vf(struct ixgbe_hw *hw, u32 reg)
 {

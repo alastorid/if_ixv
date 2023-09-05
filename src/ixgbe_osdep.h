@@ -181,6 +181,7 @@ struct ixgbe_osdep
 struct ixgbe_hw;
 
 /* These routines are needed by the shared code */
+extern u8 ixgbe_read8_pci_cfg_vf(struct ixgbe_hw *, u32);
 extern u16 ixgbe_read_pci_cfg_vf(struct ixgbe_hw *, u32);
 extern u16 ixgbe_read_pci_cfg_pf(struct ixgbe_hw *, u32);
 
