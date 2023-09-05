@@ -1,6 +1,9 @@
 FreeBSD Driver for Intel(R) Ethernet 10 Gigabit PCI Express Server Adapters
 ===Modified 1.5.33 for FreeBSD on HyperV, use at your own risk==============
 
+X540-AT2 VF 8086 1530
+FreeBSD 13.2-RELEASE
+
 March 10, 2021
 
 Current progress:
