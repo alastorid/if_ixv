@@ -1549,7 +1549,7 @@ ixv_initialize_receive_units(struct ixgbe_softc *sc)
 	IXGBE_WRITE_REG(hw, IXGBE_VFPSRTYPE, psrtype);
 
 	/* Tell PF our max_frame size */
-	if (ixgbevf_rlpml_set_vf(hw, sc->max_frame_size) != 0) {
+	if (hw->mac.ops.set_rlpml(hw, sc->max_frame_size) != 0) {
 		device_printf(sc->dev, "There is a problem with the PF setup.  It is likely the receive unit for this VF will not function correctly.\n");
 	}
 

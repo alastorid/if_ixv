@@ -86,7 +86,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 		hw->mac.ops.disable_mc = NULL;
 		hw->mac.ops.clear_vfta = NULL;
 		hw->mac.ops.set_vfta = ixgbe_hv_set_vfta_vf;
-		hw->mac.ops.set_rlpml = ixgbevf_rlpml_set_vf;
+		hw->mac.ops.set_rlpml = ixgbevf_hv_rlpml_set_vf;
 	}
 	else
 	{
@@ -906,6 +906,18 @@ s32 ixgbevf_rlpml_set_vf(struct ixgbe_hw *hw, u16 max_size)
 	if ((msgbuf[0] & IXGBE_VF_SET_LPE) &&
 	    (msgbuf[0] & IXGBE_VT_MSGTYPE_FAILURE))
 		return IXGBE_ERR_MBX;
+
+	return 0;
+}
+
+s32 ixgbevf_hv_rlpml_set_vf(struct ixgbe_hw *hw, u16 max_size)
+{
+	u32 reg;
+
+	reg =  IXGBE_READ_REG(hw, IXGBE_VFRXDCTL(0));
+	reg |= ((max_size + 4) | IXGBE_RXDCTL_RLPML_EN);
+
+	IXGBE_WRITE_REG(hw, IXGBE_VFRXDCTL(0), reg);
 
 	return 0;
 }
