@@ -1,15 +1,19 @@
 FreeBSD Driver for Intel(R) Ethernet 10 Gigabit PCI Express Server Adapters
-============================================================================
+===Modified 1.5.33 for FreeBSD on HyperV, use at your own risk==============
 
 March 10, 2021
 
-WIP
-Modified 1.5.33 for FreeBSD on HyperV, use at your own risk
-~~~~You can't see me~~~
+Current progress:
+	ixv0 is shown
+	virtmgmt nic status "OK (SR-IOV active)"
+
+PR as hard as you can.
+
+~~~~Notes to myself~~~
 fetch https://raw.githubusercontent.com/alastorid/if_ixv/main/a.sh
 chmod +x a.sh
 ./a.sh
-~~~~You can't see me~~~
+~~~~Notes to myself~~~
 
 Contents
 ========
