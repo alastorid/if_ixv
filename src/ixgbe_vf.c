@@ -67,7 +67,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 		hw->mac.ops.get_mac_addr = ixgbe_get_mac_addr_vf;
 		hw->mac.ops.stop_adapter = ixgbe_stop_adapter_vf;
 		hw->mac.ops.get_bus_info = NULL;
-		hw->mac.ops.negotiate_api_version = ixgbevf_negotiate_api_version;
+		hw->mac.ops.negotiate_api_version = ixgbevf_hv_negotiate_api_version;
 
 		/* Link */
 		hw->mac.ops.setup_link = ixgbe_setup_mac_link_vf;
@@ -904,6 +904,14 @@ int ixgbevf_negotiate_api_version(struct ixgbe_hw *hw, int api)
 	}
 
 	return err;
+}
+
+int ixgbevf_hv_negotiate_api_version(struct ixgbe_hw *hw, int api)
+{
+	if (api != ixgbe_mbox_api_10)
+		return IXGBE_ERR_INVALID_ARGUMENT;
+
+	return 0;
 }
 
 int ixgbevf_get_queues(struct ixgbe_hw *hw, unsigned int *num_tcs,
