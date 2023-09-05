@@ -204,6 +204,8 @@ s32 ixgbe_hv_check_mac_link_vf(struct ixgbe_hw *hw, ixgbe_link_speed *speed,
 			    bool *link_up, bool autoneg_wait_to_complete);
 s32 ixgbe_set_rar_vf(struct ixgbe_hw *hw, u32 index, u8 *addr, u32 vmdq,
 		     u32 enable_addr);
+s32 ixgbe_hv_set_rar_vf(struct ixgbe_hw *hw, u32 index, u8 *addr, u32 vmdq,
+		     u32 enable_addr);
 s32 ixgbevf_set_uc_addr_vf(struct ixgbe_hw *hw, u32 index, u8 *addr);
 s32 ixgbe_update_mc_addr_list_vf(struct ixgbe_hw *hw, u8 *mc_addr_list,
 				 u32 mc_addr_count, ixgbe_mc_addr_itr,

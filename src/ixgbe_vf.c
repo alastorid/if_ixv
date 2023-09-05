@@ -34,6 +34,7 @@
 
 
 #include "ixgbe_vf.h"
+#include <strings.h>
 
 #ifndef IXGBE_VFWRITE_REG
 #define IXGBE_VFWRITE_REG IXGBE_WRITE_REG
@@ -75,7 +76,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 		hw->mac.ops.get_link_capabilities = NULL;
 
 		/* RAR, Multicast, VLAN */
-		hw->mac.ops.set_rar = ixgbe_set_rar_vf;
+		hw->mac.ops.set_rar = ixgbe_hv_set_rar_vf;
 		hw->mac.ops.set_uc_addr = ixgbevf_set_uc_addr_vf;
 		hw->mac.ops.init_rx_addrs = NULL;
 		hw->mac.ops.update_mc_addr_list = ixgbe_update_mc_addr_list_vf;
@@ -420,6 +421,14 @@ s32 ixgbe_set_rar_vf(struct ixgbe_hw *hw, u32 index, u8 *addr, u32 vmdq,
 	return ret_val;
 }
 
+s32 ixgbe_hv_set_rar_vf(struct ixgbe_hw *hw, u32 index, u8 *addr, u32 vmdq,
+		     u32 enable_addr)
+{
+	if (!bcmp(addr, hw->mac.perm_addr, ETHER_ADDR_LEN))
+		return 0;
+
+	return IXGBE_ERR_FEATURE_NOT_SUPPORTED;
+}
 /**
  * ixgbe_update_mc_addr_list_vf - Update Multicast addresses
  * @hw: pointer to the HW structure
