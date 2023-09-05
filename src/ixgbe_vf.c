@@ -80,7 +80,7 @@ s32 ixgbe_init_ops_vf(struct ixgbe_hw *hw)
 		hw->mac.ops.set_uc_addr = ixgbevf_set_uc_addr_vf;
 		hw->mac.ops.init_rx_addrs = NULL;
 		hw->mac.ops.update_mc_addr_list = ixgbe_hv_update_mc_addr_list_vf;
-		hw->mac.ops.update_xcast_mode = ixgbevf_update_xcast_mode;
+		hw->mac.ops.update_xcast_mode = ixgbevf_hv_update_xcast_mode;
 		hw->mac.ops.get_link_state = ixgbe_get_link_state_vf;
 		hw->mac.ops.enable_mc = NULL;
 		hw->mac.ops.disable_mc = NULL;
@@ -522,6 +522,10 @@ s32 ixgbevf_update_xcast_mode(struct ixgbe_hw *hw, int xcast_mode)
 	return IXGBE_SUCCESS;
 }
 
+s32 ixgbevf_hv_update_xcast_mode(struct ixgbe_hw *hw, int xcast_mode)
+{
+	return IXGBE_ERR_FEATURE_NOT_SUPPORTED;
+}
 /**
  * ixgbe_get_link_state_vf - Get VF link state from PF
  * @hw: pointer to the HW structure
